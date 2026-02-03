@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vitor | Portfolio Automação</title>
+    <title>Signal Reaper | Engineering Labs</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-black: #000000;
-            --card-grey: #111111;
-            --flipper-orange: #FF8200; /* Laranja clássico da Flipper */
-            --text-grey: #888888;
-            --border-color: #222222;
+            --card-grey: rgba(17, 17, 17, 0.9);
+            --flipper-orange: #FF8200;
+            --text-grey: #bbbbbb;
+            --border-color: #333333;
         }
 
         body {
@@ -19,98 +19,136 @@
             font-family: 'Inter', sans-serif; overflow-x: hidden;
         }
 
-        /* Navbar estilo Glassmorphism */
+        /* MOTOR DO VÍDEO DE FUNDO */
+        .video-container {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2; overflow: hidden;
+        }
+
+        .video-container video {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.5; /* Ajuste a visibilidade do seu vídeo aqui */
+        }
+
+        .video-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 20%, black 95%);
+            z-index: -1;
+        }
+
+        /* NAVEGAÇÃO */
         nav {
             position: fixed; top: 0; width: 100%; height: 70px;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.7);
             border-bottom: 1px solid var(--border-color);
             display: flex; align-items: center; justify-content: space-around;
             backdrop-filter: blur(10px); z-index: 1000;
         }
 
-        .logo { font-family: 'Roboto Mono', monospace; color: var(--flipper-orange); font-weight: bold; }
+        .logo { font-family: 'Roboto Mono', monospace; color: var(--flipper-orange); font-weight: bold; letter-spacing: 2px; }
 
-        /* Hero Section */
+        /* HERO SECTION */
         header {
-            height: 80vh; display: flex; flex-direction: column;
+            height: 90vh; display: flex; flex-direction: column;
             justify-content: center; align-items: center; text-align: center;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 70%);
+            padding: 0 20px;
         }
 
-        header h1 { font-family: 'Roboto Mono', monospace; font-size: 3rem; margin: 0; }
-        header p { color: var(--text-grey); max-width: 600px; margin-top: 15px; }
+        header h1 { 
+            font-family: 'Roboto Mono', monospace; 
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            margin: 0; 
+            text-shadow: 0 0 20px rgba(255, 130, 0, 0.5);
+        }
 
-        /* Grade de Projetos (Marauder, ESP32, etc) */
+        header p { color: var(--text-grey); max-width: 700px; margin-top: 15px; font-size: 1.1rem; letter-spacing: 1px; }
+
+        /* GRADE DE PROJETOS */
         .container {
-            max-width: 1100px; margin: 0 auto; padding: 50px 20px;
+            max-width: 1100px; margin: 0 auto; padding: 100px 20px;
             display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 25px;
+            position: relative; z-index: 1;
         }
 
         .project-card {
             background: var(--card-grey);
             border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 25px;
-            transition: all 0.3s ease; position: relative;
-            overflow: hidden;
+            border-radius: 12px; padding: 30px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
         }
 
         .project-card:hover {
             border-color: var(--flipper-orange);
             transform: translateY(-5px);
-            box-shadow: 0 0 20px rgba(255, 130, 0, 0.1);
+            box-shadow: 0 0 30px rgba(255, 130, 0, 0.15);
         }
 
-        .project-card h3 { font-family: 'Roboto Mono', monospace; margin: 0 0 10px 0; color: var(--flipper-orange); }
-        .project-card p { color: var(--text-grey); font-size: 0.9rem; line-height: 1.6; }
+        .project-card h3 { font-family: 'Roboto Mono', monospace; margin: 0 0 12px 0; color: var(--flipper-orange); }
+        .project-card p { color: var(--text-grey); font-size: 0.95rem; line-height: 1.6; }
 
         .tag {
             font-size: 0.7rem; background: #222; padding: 4px 8px;
-            border-radius: 4px; color: #eee; margin-right: 5px;
+            border-radius: 4px; color: #eee; margin-right: 5px; border: 1px solid #444;
         }
 
-        /* Botão Estilizado */
         .btn {
             background: var(--flipper-orange); color: black;
-            padding: 10px 20px; border-radius: 6px; text-decoration: none;
-            font-weight: bold; display: inline-block; margin-top: 20px;
-            transition: opacity 0.2s;
+            padding: 14px 35px; border-radius: 6px; text-decoration: none;
+            font-weight: bold; font-family: 'Roboto Mono', monospace;
+            margin-top: 40px; transition: 0.3s;
         }
-        .btn:hover { opacity: 0.8; }
+
+        .btn:hover { background: #fff; transform: scale(1.05); }
+
+        footer { text-align: center; padding: 50px; color: #444; font-size: 0.8rem; font-family: 'Roboto Mono'; }
     </style>
 </head>
 <body>
 
+    <div class="video-container">
+        <video autoplay muted loop playsinline>
+            <source src="background.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="video-overlay"></div>
+
     <nav>
-        <div class="logo">VITOR_PROJECTS_V1.0</div>
-        <div style="color: var(--text-grey); font-size: 0.8rem;">ENGINEERING & AUTOMATION</div>
+        <div class="logo">SIGNAL_REAPER_V1.0</div>
+        <div style="color: var(--text-grey); font-size: 0.7rem; font-family: 'Roboto Mono';">STATUS: ONLINE</div>
     </nav>
 
     <header>
-        <h1>Cyberdeck & Pentest Tools</h1>
-        <p>Desenvolvimento de hardware e automação industrial focados em segurança e eficiência.</p>
-        <a href="#projetos" class="btn">VER PROJETOS</a>
+        <h1>SIGNAL REAPER</h1>
+        <p>Desenvolvimento de hardware e ferramentas de auditoria de sinais. Engenharia de Controlo e Automação aplicada à Segurança Ofensiva.</p>
+        <a href="#projetos" class="btn">INICIAR TERMINAL</a>
     </header>
 
     <div class="container" id="projetos">
         <div class="project-card">
             <span class="tag">ESP32</span><span class="tag">C++</span>
             <h3>ESP32 Marauder</h3>
-            <p>Implementação de firmware para auditoria de redes Wi-Fi e Bluetooth. Portabilidade total e interface customizada.</p>
+            <p>Implementação de firmware especializado para auditoria de protocolos 2.4GHz e Bluetooth. Foco em portabilidade e análise de pacotes.</p>
         </div>
 
         <div class="project-card">
-            <span class="tag">AUTOMAÇÃO</span><span class="tag">ELECTRONICS</span>
-            <h3>Custom Cyberdeck</h3>
-            <p>Construção de uma estação de trabalho portátil integrada com módulos de rádio e sensores ambientais.</p>
+            <span class="tag">RF</span><span class="tag">SUB-GHZ</span>
+            <h3>Signal Reaper Lab</h3>
+            <p>Estação de trabalho customizada para análise de radiofrequência, clonagem de sinais e testes de vulnerabilidade em hardware.</p>
         </div>
 
         <div class="project-card">
             <span class="tag">IFSP</span><span class="tag">CONTROL</span>
-            <h3>Modelagem Matemática</h3>
-            <p>Sistemas de controle e automação aplicados à indústria, com foco em estabilidade e resposta dinâmica.</p>
+            <h3>Systems Modeling</h3>
+            <p>Raciocínio analítico e modelagem matemática de sistemas de controlo, integrando teoria e prática laboratorial.</p>
         </div>
     </div>
+
+    <footer>// VITOR PROJECTS - 2026 // IFSP CATANDUVA</footer>
 
 </body>
 </html>
