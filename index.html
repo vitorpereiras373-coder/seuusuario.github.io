@@ -1,0 +1,95 @@
+<style>
+    /* ... (Mantenha o CSS anterior e adicione/ajuste estes) ... */
+
+    .modal-content {
+        background: #0a0a0a;
+        border: 1px solid var(--flipper-orange);
+        border-radius: 15px;
+        max-width: 850px;
+        width: 92%;
+        display: flex;
+        flex-direction: column; /* Coluna no celular */
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 0 40px rgba(255, 130, 0, 0.2);
+    }
+
+    @media (min-width: 768px) {
+        .modal-content { flex-direction: row; } /* Lado a lado no PC */
+    }
+
+    .modal-video {
+        flex: 1.2;
+        background: #000;
+        position: relative;
+        min-height: 300px; /* Garante tamanho no celular */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    @media (min-width: 768px) {
+        .modal-video { border-bottom: none; border-right: 1px solid var(--border-color); }
+    }
+
+    .modal-video video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(1.1) contrast(1.1) drop-shadow(0 0 15px var(--flipper-orange));
+    }
+
+    /* EFEITO SCANLINE (Linhas Hacker) */
+    .modal-video::after {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+        background-size: 100% 4px;
+        pointer-events: none;
+    }
+
+    .modal-info {
+        flex: 1;
+        padding: 25px;
+        font-family: 'Roboto Mono', monospace;
+    }
+
+    .price-tag {
+        font-size: 2rem;
+        color: #1DB954;
+        font-weight: bold;
+        display: block;
+        margin: 20px 0;
+        text-shadow: 0 0 10px rgba(29, 185, 84, 0.3);
+    }
+</style>
+
+<div id="marauderModal" class="modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="close-modal" onclick="closeModal()" style="position: absolute; top: 15px; right: 15px; z-index: 100; background: rgba(0,0,0,0.8); padding: 5px 10px; border-radius: 4px; border: 1px solid #333; cursor: pointer;">[X] CLOSE</span>
+        
+        <div class="modal-video">
+            <video id="vProject" muted loop playsinline preload="none">
+                <source src="VideoProject.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <div class="modal-info">
+            <h2 style="color: var(--flipper-orange); margin-top: 0;">MARAUDER V1</h2>
+            <p style="color: #666; font-size: 0.75rem; margin-bottom: 20px;">SYSTEM_REAPER_LABS // MODULE_01</p>
+            
+            <ul style="color: #ccc; font-size: 0.85rem; line-height: 1.8; list-style: none; padding: 0;">
+                <li><span style="color: var(--flipper-orange); font-weight: bold;">></span> MCU: ESP32-WROOM-32</li>
+                <li><span style="color: var(--flipper-orange); font-weight: bold;">></span> DISPLAY: TFT 2.8" Touch</li>
+                <li><span style="color: var(--flipper-orange); font-weight: bold;">></span> CASE: Custom 3D Design</li>
+                <li><span style="color: var(--flipper-orange); font-weight: bold;">></span> BATERIA: 1800mAh LiPo</li>
+                <li><span style="color: var(--flipper-orange); font-weight: bold;">></span> ANTENA: 5dBi High Gain</li>
+            </ul>
+            
+            <span class="price-tag">R$ 350,00</span>
+            <a href="https://wa.me/SEUNUMERO" target="_blank" class="btn" style="width: 100%; text-align: center; box-sizing: border-box; display: block;">ADQUIRIR MÓDULO</a>
+        </div>
+    </div>
+</div>
