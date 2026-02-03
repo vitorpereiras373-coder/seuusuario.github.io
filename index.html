@@ -1,124 +1,85 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signal Reaper | Labs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-black: #000000;
-            --card-grey: rgba(17, 17, 17, 0.9);
-            --flipper-orange: #FF8200;
-            --text-grey: #bbbbbb;
-            --border-color: #333333;
-        }
+<style>
+    /* ... (mantenha o restante do CSS anterior) ... */
 
-        body { margin: 0; padding: 0; background: var(--bg-black); color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    .modal-content {
+        background: #0a0a0a;
+        border: 1px solid var(--flipper-orange);
+        border-radius: 15px;
+        max-width: 850px;
+        width: 95%;
+        display: flex;
+        flex-direction: column; /* Padrão mobile: um sobre o outro */
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 0 50px rgba(255,130,0,0.2);
+    }
 
-        /* VÍDEO PRINCIPAL DE FUNDO */
-        .video-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; }
-        .video-container video { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
-        .video-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 20%, black 95%); z-index: -1; }
+    @media (min-width: 768px) {
+        .modal-content { flex-direction: row; } /* No PC: Lado a lado */
+    }
 
-        nav { position: fixed; top: 0; width: 100%; height: 70px; background: rgba(0, 0, 0, 0.7); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-around; backdrop-filter: blur(10px); z-index: 1000; }
-        .logo { font-family: 'Roboto Mono', monospace; color: var(--flipper-orange); font-weight: bold; letter-spacing: 2px; }
+    .modal-video {
+        flex: 1.2;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        min-height: 350px; /* Garante que o vídeo apareça grande no celular */
+    }
 
-        header { height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        header h1 { font-family: 'Roboto Mono', monospace; font-size: clamp(2.5rem, 10vw, 5rem); margin: 0; text-shadow: 0 0 20px rgba(255, 130, 0, 0.5); }
+    .modal-video video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        /* EFEITO DE BORDA E GLOW NO VÍDEO */
+        filter: drop-shadow(0 0 10px var(--flipper-orange)) brightness(1.1);
+        border: 1px solid rgba(255, 130, 0, 0.3);
+    }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 100px 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; position: relative; z-index: 1; }
-        .project-card { background: var(--card-grey); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; transition: 0.3s; backdrop-filter: blur(8px); }
-        .project-card:hover { border-color: var(--flipper-orange); transform: translateY(-5px); }
-        .project-card h3 { font-family: 'Roboto Mono', monospace; margin: 0; color: var(--flipper-orange); }
+    /* Efeito de sobreposição de linhas (Scanlines) opcional */
+    .modal-video::after {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                    linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+        background-size: 100% 3px, 3px 100%;
+        pointer-events: none;
+    }
 
-        /* MODAL (JANELA DE DETALHES) */
-        .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); align-items: center; justify-content: center; }
-        .modal-content { background: #0a0a0a; border: 1px solid var(--flipper-orange); border-radius: 15px; max-width: 850px; width: 95%; display: flex; flex-wrap: wrap; overflow: hidden; position: relative; box-shadow: 0 0 50px rgba(255,130,0,0.2); }
+    .modal-info {
+        flex: 1;
+        padding: 30px;
+        font-family: 'Roboto Mono', monospace;
+        background: #0a0a0a;
+    }
+</style>
+
+<div id="marauderModal" class="modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="close-modal" onclick="closeModal()" style="position: absolute; top: 15px; right: 15px; z-index: 100; background: rgba(0,0,0,0.7); padding: 5px; border-radius: 4px;">[ FECHAR X ]</span>
         
-        .modal-video { flex: 1; min-width: 300px; background: #000; display: flex; align-items: center; }
-        .modal-video video { width: 100%; height: 100%; object-fit: cover; }
-
-        .modal-info { flex: 1; min-width: 300px; padding: 40px; font-family: 'Roboto Mono', monospace; }
-        .modal-info h2 { color: var(--flipper-orange); margin-top: 0; }
-        .price { font-size: 2rem; color: #1DB954; font-weight: bold; display: block; margin: 20px 0; }
-        .close-modal { position: absolute; top: 20px; right: 20px; color: #555; cursor: pointer; font-size: 1.2rem; z-index: 10; }
-        .close-modal:hover { color: white; }
-
-        .tag { font-size: 0.7rem; background: #222; padding: 4px 8px; border-radius: 4px; color: #eee; margin-right: 5px; border: 1px solid #444; }
-        .btn { background: var(--flipper-orange); color: black; padding: 14px 35px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 20px; transition: 0.3s; }
-        .btn:hover { background: #fff; transform: scale(1.02); }
-    </style>
-</head>
-<body>
-
-    <div class="video-container">
-        <video autoplay muted loop playsinline>
-            <source src="background.mp4" type="video/mp4">
-        </video>
-    </div>
-    <div class="video-overlay"></div>
-
-    <nav>
-        <div class="logo">SIGNAL_REAPER_V1.1</div>
-        <div style="color: var(--text-grey); font-size: 0.7rem; font-family: 'Roboto Mono';">STATUS: ACTIVE</div>
-    </nav>
-
-    <header>
-        <h1>SIGNAL REAPER</h1>
-        <p>Audit. Analyze. Replicate.</p>
-    </header>
-
-    <div class="container" id="projetos">
-        <div class="project-card">
-            <span class="tag">ESP32</span><span class="tag">C++</span>
-            <h3>ESP32 Marauder</h3>
-            <p>Firmware de auditoria para redes Wi-Fi e Bluetooth.</p>
-            <a href="javascript:void(0)" onclick="openModal()" class="btn" style="padding: 10px 20px; font-size: 0.8rem;">DETALHES DO MÓDULO</a>
-        </div>
-        
+        <div class="modal-video">
+            <video id="vProject" muted loop playsinline preload="none">
+                <source src="VideoProject.mp4" type="video/mp4">
+            </video>
         </div>
 
-    <div id="marauderModal" class="modal" onclick="closeModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-modal" onclick="closeModal()">[ FECHAR X ]</span>
+        <div class="modal-info">
+            <h2 style="font-size: 1.4rem;">MARAUDER V1</h2>
+            <p style="color: #888; font-size: 0.8rem; margin-bottom: 15px;">STATION: SIGNAL_REAPER_LABS</p>
             
-            <div class="modal-video">
-                <video id="vProject" muted loop playsinline>
-                    <source src="VideoProject.mp4" type="video/mp4">
-                </video>
-            </div>
-
-            <div class="modal-info">
-                <h2>MARAUDER V1</h2>
-                <p style="color: #888; font-size: 0.9rem;">ESPECIFICAÇÕES TÉCNICAS:</p>
-                <ul style="color: #ccc; font-size: 0.85rem; line-height: 1.8;">
-                    <li>MCU: ESP32-WROOM-32</li>
-                    <li>DISPLAY: TFT 2.8" c/ Touch</li>
-                    <li>CASE: Custom Signal Reaper</li>
-                    <li>BATERIA: LiPo 1800mAh</li>
-                    <li>ANTENA: 5dBi Externa</li>
-                </ul>
-                <span class="price">R$ 350,00</span>
-                <a href="https://wa.me/SEUNUMERO" target="_blank" class="btn" style="width: 100%; text-align: center; box-sizing: border-box;">ENCOMENDAR AGORA</a>
-            </div>
+            <ul style="color: #ccc; font-size: 0.85rem; line-height: 1.8; list-style: none; padding: 0;">
+                <li><span style="color: var(--flipper-orange);">></span> MCU: ESP32-WROOM-32</li>
+                <li><span style="color: var(--flipper-orange);">></span> DISPLAY: TFT 2.8" Touch</li>
+                <li><span style="color: var(--flipper-orange);">></span> CASE: Custom Signal Reaper</li>
+                <li><span style="color: var(--flipper-orange);">></span> BATERIA: 1800mAh LiPo</li>
+                <li><span style="color: var(--flipper-orange);">></span> ANTENA: 5dBi High Gain</li>
+            </ul>
+            
+            <span style="font-size: 1.8rem; color: #1DB954; font-weight: bold; display: block; margin: 20px 0;">R$ 350,00</span>
+            <a href="https://wa.me/SEUNUMERO" target="_blank" class="btn" style="width: 100%; text-align: center; box-sizing: border-box; display: block;">RESERVAR MÓDULO</a>
         </div>
     </div>
-
-    <script>
-        const modal = document.getElementById('marauderModal');
-        const video = document.getElementById('vProject');
-
-        function openModal() {
-            modal.style.display = 'flex';
-            video.play(); // Começa o vídeo do projeto ao abrir
-        }
-
-        function closeModal() {
-            modal.style.display = 'none';
-            video.pause(); // Pausa para economizar processamento
-        }
-    </script>
-
-</body>
-</html>
+</div>
