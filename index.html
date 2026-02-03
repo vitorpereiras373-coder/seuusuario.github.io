@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitor | Portfolio Automação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-black: #000000;
+            --card-grey: #111111;
+            --flipper-orange: #FF8200; /* Laranja clássico da Flipper */
+            --text-grey: #888888;
+            --border-color: #222222;
+        }
+
+        body {
+            margin: 0; padding: 0; background: var(--bg-black); color: white;
+            font-family: 'Inter', sans-serif; overflow-x: hidden;
+        }
+
+        /* Navbar estilo Glassmorphism */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-around;
+            backdrop-filter: blur(10px); z-index: 1000;
+        }
+
+        .logo { font-family: 'Roboto Mono', monospace; color: var(--flipper-orange); font-weight: bold; }
+
+        /* Hero Section */
+        header {
+            height: 80vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 70%);
+        }
+
+        header h1 { font-family: 'Roboto Mono', monospace; font-size: 3rem; margin: 0; }
+        header p { color: var(--text-grey); max-width: 600px; margin-top: 15px; }
+
+        /* Grade de Projetos (Marauder, ESP32, etc) */
+        .container {
+            max-width: 1100px; margin: 0 auto; padding: 50px 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: var(--card-grey);
+            border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 25px;
+            transition: all 0.3s ease; position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            border-color: var(--flipper-orange);
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(255, 130, 0, 0.1);
+        }
+
+        .project-card h3 { font-family: 'Roboto Mono', monospace; margin: 0 0 10px 0; color: var(--flipper-orange); }
+        .project-card p { color: var(--text-grey); font-size: 0.9rem; line-height: 1.6; }
+
+        .tag {
+            font-size: 0.7rem; background: #222; padding: 4px 8px;
+            border-radius: 4px; color: #eee; margin-right: 5px;
+        }
+
+        /* Botão Estilizado */
+        .btn {
+            background: var(--flipper-orange); color: black;
+            padding: 10px 20px; border-radius: 6px; text-decoration: none;
+            font-weight: bold; display: inline-block; margin-top: 20px;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">VITOR_PROJECTS_V1.0</div>
+        <div style="color: var(--text-grey); font-size: 0.8rem;">ENGINEERING & AUTOMATION</div>
+    </nav>
+
+    <header>
+        <h1>Cyberdeck & Pentest Tools</h1>
+        <p>Desenvolvimento de hardware e automação industrial focados em segurança e eficiência.</p>
+        <a href="#projetos" class="btn">VER PROJETOS</a>
+    </header>
+
+    <div class="container" id="projetos">
+        <div class="project-card">
+            <span class="tag">ESP32</span><span class="tag">C++</span>
+            <h3>ESP32 Marauder</h3>
+            <p>Implementação de firmware para auditoria de redes Wi-Fi e Bluetooth. Portabilidade total e interface customizada.</p>
+        </div>
+
+        <div class="project-card">
+            <span class="tag">AUTOMAÇÃO</span><span class="tag">ELECTRONICS</span>
+            <h3>Custom Cyberdeck</h3>
+            <p>Construção de uma estação de trabalho portátil integrada com módulos de rádio e sensores ambientais.</p>
+        </div>
+
+        <div class="project-card">
+            <span class="tag">IFSP</span><span class="tag">CONTROL</span>
+            <h3>Modelagem Matemática</h3>
+            <p>Sistemas de controle e automação aplicados à indústria, com foco em estabilidade e resposta dinâmica.</p>
+        </div>
+    </div>
+
+</body>
+</html>
