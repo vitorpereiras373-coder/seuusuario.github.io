@@ -3,131 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signal Reaper | Labs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Vitor | Portfolio Automação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --flipper-orange: #FF8200;
-            --cyber-blue: #00f2ff;
-            --bg-dark: #050505;
+            --bg-black: #000000;
+            --card-grey: #111111;
+            --flipper-orange: #FF8200; /* Laranja clássico da Flipper */
+            --text-grey: #888888;
+            --border-color: #222222;
         }
 
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            background: var(--bg-dark);
-            font-family: 'Roboto Mono', monospace;
-            color: white; overflow-x: hidden;
+        body {
+            margin: 0; padding: 0; background: var(--bg-black); color: white;
+            font-family: 'Inter', sans-serif; overflow-x: hidden;
         }
 
-        /* CONTAINER DO VÍDEO DE FUNDO */
-        .video-background {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1; overflow: hidden;
-        }
-
-        .video-background video {
-            width: 100%; height: 100%;
-            object-fit: cover; /* Faz o vídeo ocupar a tela toda */
-            opacity: 0.4; /* Deixa o vídeo suave para não atrapalhar o texto */
-            filter: grayscale(20%) contrast(120%);
-        }
-
-        /* SOBREPOSIÇÃO PARA DAR PROFUNDIDADE */
-        .overlay {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 20%, var(--bg-dark) 90%);
-            z-index: 0;
-        }
-
-        /* CONTEÚDO PRINCIPAL */
+        /* Navbar estilo Glassmorphism */
         nav {
-            position: relative; z-index: 10;
-            padding: 20px 50px; display: flex;
-            justify-content: space-between; align-items: center;
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-around;
+            backdrop-filter: blur(10px); z-index: 1000;
         }
 
-        .logo { color: var(--flipper-orange); font-weight: bold; letter-spacing: 2px; }
+        .logo { font-family: 'Roboto Mono', monospace; color: var(--flipper-orange); font-weight: bold; }
 
-        .hero {
-            position: relative; z-index: 10;
+        /* Hero Section */
+        header {
             height: 80vh; display: flex; flex-direction: column;
             justify-content: center; align-items: center; text-align: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 70%);
         }
 
-        .hero h1 {
-            font-size: 5rem; margin: 0;
-            text-shadow: 0 0 20px rgba(255, 130, 0, 0.5);
-            text-transform: uppercase;
+        header h1 { font-family: 'Roboto Mono', monospace; font-size: 3rem; margin: 0; }
+        header p { color: var(--text-grey); max-width: 600px; margin-top: 15px; }
+
+        /* Grade de Projetos (Marauder, ESP32, etc) */
+        .container {
+            max-width: 1100px; margin: 0 auto; padding: 50px 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
-        .hero p { color: #888; letter-spacing: 4px; margin-top: 10px; }
-
-        .btn-emerge {
-            margin-top: 40px; padding: 15px 40px;
-            background: transparent; border: 2px solid var(--flipper-orange);
-            color: var(--flipper-orange); font-weight: bold;
-            cursor: pointer; transition: 0.3s; text-decoration: none;
+        .project-card {
+            background: var(--card-grey);
+            border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 25px;
+            transition: all 0.3s ease; position: relative;
+            overflow: hidden;
         }
 
-        .btn-emerge:hover {
+        .project-card:hover {
+            border-color: var(--flipper-orange);
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(255, 130, 0, 0.1);
+        }
+
+        .project-card h3 { font-family: 'Roboto Mono', monospace; margin: 0 0 10px 0; color: var(--flipper-orange); }
+        .project-card p { color: var(--text-grey); font-size: 0.9rem; line-height: 1.6; }
+
+        .tag {
+            font-size: 0.7rem; background: #222; padding: 4px 8px;
+            border-radius: 4px; color: #eee; margin-right: 5px;
+        }
+
+        /* Botão Estilizado */
+        .btn {
             background: var(--flipper-orange); color: black;
-            box-shadow: 0 0 30px var(--flipper-orange);
+            padding: 10px 20px; border-radius: 6px; text-decoration: none;
+            font-weight: bold; display: inline-block; margin-top: 20px;
+            transition: opacity 0.2s;
         }
-
-        /* GRID DE ESPECIFICAÇÕES TÉCNICAS */
-        .specs-grid {
-            position: relative; z-index: 10;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px; padding: 50px; max-width: 1200px; margin: 0 auto;
-        }
-
-        .spec-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px; border-radius: 4px;
-            backdrop-filter: blur(5px);
-        }
-
-        .spec-card h3 { color: var(--cyber-blue); font-size: 0.9rem; margin-top: 0; }
-        .spec-card p { font-size: 0.8rem; color: #ccc; margin: 0; }
-
+        .btn:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
 
-    <div class="video-background">
-        <video autoplay muted loop playsinline>
-            <source src="video_bg.mp4" type="video/mp4">
-        </video>
-    </div>
-
-    <div class="overlay"></div>
-
     <nav>
-        <div class="logo">SIGNAL REAPER // V1.0</div>
-        <div style="font-size: 0.7rem; color: #444;">ENGINEERING & AUTOMATION LABS</div>
+        <div class="logo">VITOR_PROJECTS_V1.0</div>
+        <div style="color: var(--text-grey); font-size: 0.8rem;">ENGINEERING & AUTOMATION</div>
     </nav>
 
-    <div class="hero">
-        <h1>SIGNAL REAPER</h1>
-        <p>AUDIT. ANALYZE. REPEAT.</p>
-        <a href="#" class="btn-emerge">EMERGE NOW</a>
-    </div>
+    <header>
+        <h1>Cyberdeck & Pentest Tools</h1>
+        <p>Desenvolvimento de hardware e automação industrial focados em segurança e eficiência.</p>
+        <a href="#projetos" class="btn">VER PROJETOS</a>
+    </header>
 
-    <div class="specs-grid">
-        <div class="spec-card">
-            <h3>FREQUENCY RANGE</h3>
-            <p>Sub-GHz auditing with CC1101 integration.</p>
+    <div class="container" id="projetos">
+        <div class="project-card">
+            <span class="tag">ESP32</span><span class="tag">C++</span>
+            <h3>ESP32 Marauder</h3>
+            <p>Implementação de firmware para auditoria de redes Wi-Fi e Bluetooth. Portabilidade total e interface customizada.</p>
         </div>
-        <div class="spec-card">
-            <h3>WIFI AUDIT</h3>
-            <p>ESP32 Marauder firmware implementation.</p>
+
+        <div class="project-card">
+            <span class="tag">AUTOMAÇÃO</span><span class="tag">ELECTRONICS</span>
+            <h3>Custom Cyberdeck</h3>
+            <p>Construção de uma estação de trabalho portátil integrada com módulos de rádio e sensores ambientais.</p>
         </div>
-        <div class="spec-card">
-            <h3>INTERFACE</h3>
-            <p>Custom UI with low-latency response.</p>
+
+        <div class="project-card">
+            <span class="tag">IFSP</span><span class="tag">CONTROL</span>
+            <h3>Modelagem Matemática</h3>
+            <p>Sistemas de controle e automação aplicados à indústria, com foco em estabilidade e resposta dinâmica.</p>
         </div>
     </div>
 
